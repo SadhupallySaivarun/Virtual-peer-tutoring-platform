@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Orphanages</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f9;
+            text-align: center;
+        }
+
+        header {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .orphanage-list {
+            text-align: left;
+        }
+
+        .city {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        .orphanage {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>Nearby Orphanages</header>
+
+    <div class="container">
+        <input type="text" id="search" placeholder="Search city..." onkeyup="filterOrphanages()">
+        
+        <div class="orphanage-list" id="orphanage-list">
+            <!-- Orphanage list will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const orphanages = {
+            "Bangalore": ["Sunrise Orphanage - MG Road", "Hope Children's Home - Indiranagar", "Shishu Mandir - Whitefield", "Angels Shelter Home - Jayanagar", "Little Hearts Orphanage - Koramangala"],
+            "Chennai": ["Bright Future Orphanage - Anna Nagar", "New Life Foundation - T Nagar", "Helping Hands Home - Velachery", "Little Angels Home - Tambaram", "Hope & Care Shelter - Adyar"],
+            "Hyderabad": ["Hope Children's Home - Banjara Hills", "Sunshine Orphanage - Kukatpally", "Helping Hands Shelter - Secunderabad", "Aashraya Orphanage - Madhapur", "New Dawn Home - Gachibowli"],
+            "Mumbai": ["Asha Kiran Orphanage - Andheri", "Hope & Love Home - Bandra", "Sunshine Children's Shelter - Dadar", "Little Stars Orphanage - Navi Mumbai", "Helping Hands Home - Malad"],
+            "Delhi": ["Sai Orphanage - Connaught Place", "Bright Future Shelter - Lajpat Nagar", "New Life Foundation - Rohini", "Care & Hope Orphanage - Saket", "Sunrise Home for Kids - Karol Bagh"],
+            "Kolkata": ["Shanti Niketan Home - Park Street", "Little Dreams Orphanage - Howrah", "Angels Shelter - Salt Lake", "New Beginnings Home - Ballygunge", "Hope Foundation Shelter - Dum Dum"]
+        };
+
+        function displayOrphanages() {
+            const listContainer = document.getElementById("orphanage-list");
+            listContainer.innerHTML = "";
+
+            for (const city in orphanages) {
+                const cityElement = document.createElement("div");
+                cityElement.className = "city";
+                cityElement.innerText = city;
+                listContainer.appendChild(cityElement);
+
+                orphanages[city].forEach(name => {
+                    const orphanageElement = document.createElement("div");
+                    orphanageElement.className = "orphanage";
+                    orphanageElement.innerText = name;
+                    listContainer.appendChild(orphanageElement);
+                });
+            }
+        }
+
+        function filterOrphanages() {
+            const searchValue = document.getElementById("search").value.toLowerCase();
+            const listContainer = document.getElementById("orphanage-list");
+            listContainer.innerHTML = "";
+
+            for (const city in orphanages) {
+                if (city.toLowerCase().includes(searchValue)) {
+                    const cityElement = document.createElement("div");
+                    cityElement.className = "city";
+                    cityElement.innerText = city;
+                    listContainer.appendChild(cityElement);
+
+                    orphanages[city].forEach(name => {
+                        const orphanageElement = document.createElement("div");
+                        orphanageElement.className = "orphanage";
+                        orphanageElement.innerText = name;
+                        listContainer.appendChild(orphanageElement);
+                    });
+                }
+            }
+        }
+
+        window.onload = displayOrphanages;
+    </script>
+
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
