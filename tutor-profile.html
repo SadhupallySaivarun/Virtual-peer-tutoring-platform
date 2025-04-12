@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-top: 50px;
+            background-image: linear-gradient(to bottom right, #f3f8ff, #e4f0ff);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 25px;
+        }
+        .profile-info img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-details {
+            flex: 1;
+            margin-left: 20px;
+        }
+        .profile-details h2 {
+            margin: 0;
+            color: #34495e;
+            font-size: 28px;
+        }
+        .profile-details p {
+            margin: 8px 0;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        .profile-details .rating {
+            color: #ff9800;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #95a5a6;
+        }
+        .upload-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .upload-btn:hover {
+            background-color: #2980b9;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        /* Form Inputs Style */
+        input[type="text"], input[type="number"], input[type="file"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .submitted-data {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .submitted-data h2 {
+            color: #34495e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Tutor Profile</h1>
+        </div>
+
+        <!-- Profile Form -->
+        <form id="tutorForm" onsubmit="handleFormSubmit(event)">
+            <div class="profile-info">
+                <!-- Profile image -->
+                <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Photo">
+                <div class="profile-details">
+                    <label for="tutorName"><strong>Tutor Name:</strong></label>
+                    <input type="text" id="tutorName" name="tutorName" placeholder="Enter your full name" required>
+
+                    <label for="bio"><strong>Bio:</strong></label>
+                    <textarea id="bio" name="bio" placeholder="Write a short bio" rows="4" required></textarea>
+
+                    <label for="subjectExpertise"><strong>Subject Expertise:</strong></label>
+                    <input type="text" id="subjectExpertise" name="subjectExpertise" placeholder="Math, Science, etc." required>
+
+                    <label for="skillLevel"><strong>Skill Level:</strong></label>
+                    <input type="text" id="skillLevel" name="skillLevel" placeholder="Beginner, Intermediate, Advanced" required>
+
+                    <label for="hourlyRate"><strong>Hourly Rate:</strong></label>
+                    <input type="number" id="hourlyRate" name="hourlyRate" placeholder="$40/hr" required>
+
+                    <label for="availability"><strong>Availability:</strong></label>
+                    <input type="text" id="availability" name="availability" placeholder="Monday to Friday, 9 AM - 5 PM" required>
+
+                    <label for="feedbackScore"><strong>Feedback Score:</strong></label>
+                    <input type="text" id="feedbackScore" name="feedbackScore" placeholder="4.8/5" required>
+
+                    <label for="sessionsConducted"><strong>Total Sessions Conducted:</strong></label>
+                    <input type="number" id="sessionsConducted" name="sessionsConducted" placeholder="120" required>
+
+                    <label for="resourceLibrary"><strong>Resource Library Contributions:</strong></label>
+                    <input type="number" id="resourceLibrary" name="resourceLibrary" placeholder="15" required>
+                </div>
+            </div>
+
+            <div class="section-title">Upload Your Profile Picture:</div>
+            <label class="upload-btn">
+                Upload Profile Picture
+                <input type="file" id="fileInput" name="profilePicture" accept="image/*" onchange="previewImage(event)">
+            </label>
+
+            <button type="submit">Submit Profile</button>
+        </form>
+
+        <!-- Submitted Data Display Section -->
+        <div class="submitted-data" id="submittedData" style="display: none;">
+            <h2>Your Submitted Tutor Profile:</h2>
+            <p><strong>Name:</strong> <span id="displayTutorName"></span></p>
+            <p><strong>Bio:</strong> <span id="displayBio"></span></p>
+            <p><strong>Subject Expertise:</strong> <span id="displaySubjectExpertise"></span></p>
+            <p><strong>Skill Level:</strong> <span id="displaySkillLevel"></span></p>
+            <p><strong>Hourly Rate:</strong> $<span id="displayHourlyRate"></span></p>
+            <p><strong>Availability:</strong> <span id="displayAvailability"></span></p>
+            <p><strong>Feedback Score:</strong> <span id="displayFeedbackScore"></span></p>
+            <p><strong>Total Sessions Conducted:</strong> <span id="displaySessionsConducted"></span></p>
+            <p><strong>Resource Library Contributions:</strong> <span id="displayResourceLibrary"></span></p>
+            <img id="displayProfileImage" src="" alt="Uploaded Profile Image" width="150" style="border-radius: 50%; margin-top: 20px;">
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Tutor Platform</p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to preview the uploaded image
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                // Set the source of the profile image to the uploaded image
+                document.getElementById('profileImage').src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file); // Read the uploaded file as a data URL
+            }
+        }
+
+        // Handle form submission and display the submitted data
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Prevent the form from submitting
+
+            // Get values from the form
+            const tutorName = document.getElementById('tutorName').value;
+            const bio = document.getElementById('bio').value;
+            const subjectExpertise = document.getElementById('subjectExpertise').value;
+            const skillLevel = document.getElementById('skillLevel').value;
+            const hourlyRate = document.getElementById('hourlyRate').value;
+            const availability = document.getElementById('availability').value;
+            const feedbackScore = document.getElementById('feedbackScore').value;
+            const sessionsConducted = document.getElementById('sessionsConducted').value;
+            const resourceLibrary = document.getElementById('resourceLibrary').value;
+            const profileImage = document.getElementById('profileImage').src;
+
+            // Display the submitted data in the submitted data section
+            document.getElementById('displayTutorName').textContent = tutorName;
+            document.getElementById('displayBio').textContent = bio;
+            document.getElementById('displaySubjectExpertise').textContent = subjectExpertise;
+            document.getElementById('displaySkillLevel').textContent = skillLevel;
+            document.getElementById('displayHourlyRate').textContent = hourlyRate;
+            document.getElementById('displayAvailability').textContent = availability;
+            document.getElementById('displayFeedbackScore').textContent = feedbackScore;
+            document.getElementById('displaySessionsConducted').textContent = sessionsConducted;
+            document.getElementById('displayResourceLibrary').textContent = resourceLibrary;
+            document.getElementById('displayProfileImage').src = profileImage;
+
+            // Show the submitted data section
+            document.getElementById('submittedData').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
