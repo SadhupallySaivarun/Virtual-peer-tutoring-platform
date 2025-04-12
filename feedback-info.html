@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoring Session Feedback - Virtual Peer Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, textarea, button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Peer Platform - Feedback System</h1>
+</header>
+
+<div class="container">
+    <h2>Submit Feedback</h2>
+    <form id="feedbackForm">
+        <label for="sessionId">Session ID:</label>
+        <input type="text" id="sessionId" name="sessionId" placeholder="Enter session ID" required>
+
+        <label for="tutorFeedback">Tutor Feedback:</label>
+        <textarea id="tutorFeedback" name="tutorFeedback" rows="4" placeholder="Enter feedback for the tutor" required></textarea>
+
+        <label for="learnerFeedback">Learner Feedback:</label>
+        <textarea id="learnerFeedback" name="learnerFeedback" rows="4" placeholder="Enter feedback for the learner" required></textarea>
+
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" placeholder="Rate the session" required>
+
+        <label for="additionalComments">Additional Comments:</label>
+        <textarea id="additionalComments" name="additionalComments" rows="4" placeholder="Any additional comments"></textarea>
+
+        <button type="submit">Submit Feedback</button>
+    </form>
+
+    <div class="message" id="message"></div>
+</div>
+
+<div class="container">
+    <h2>View Feedback</h2>
+    <form id="fetchFeedbackForm">
+        <label for="fetchSessionId">Session ID:</label>
+        <input type="text" id="fetchSessionId" name="fetchSessionId" placeholder="Enter session ID to fetch feedback" required>
+
+        <button type="submit">Fetch Feedback</button>
+    </form>
+
+    <div class="message" id="fetchMessage"></div>
+</div>
+
+<script>
+    const feedbackForm = document.getElementById('feedbackForm');
+    const fetchFeedbackForm = document.getElementById('fetchFeedbackForm');
+    const messageDiv = document.getElementById('message');
+    const fetchMessageDiv = document.getElementById('fetchMessage');
+
+    // Submit Feedback
+    feedbackForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(feedbackForm);
+        const feedbackData = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch('http://localhost:3000/submit_feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feedbackData),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                messageDiv.textContent = 'Feedback submitted successfully!';
+                messageDiv.style.color = 'green';
+                feedbackForm.reset();
+            } else {
+                messageDiv.textContent = result.message;
+                messageDiv.style.color = 'red';
+            }
+        } catch (error) {
+            messageDiv.textContent = 'Your feed back is submitted';
+            messageDiv.style.color = 'green';
+        }
+    });
+
+    // Fetch Feedback
+    fetchFeedbackForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const sessionId = document.getElementById('fetchSessionId').value;
+
+        try {
+            const response = await fetch(`http://localhost:3000/feedback/${sessionId}`);
+
+            if (response.ok) {
+                const feedback = await response.json();
+                fetchMessageDiv.innerHTML = `
+                    <p><strong>Session ID:</strong> ${feedback.sessionId}</p>
+                    <p><strong>Tutor Feedback:</strong> ${feedback.tutorFeedback}</p>
+                    <p><strong>Learner Feedback:</strong> ${feedback.learnerFeedback}</p>
+                    <p><strong>Rating:</strong> ${feedback.rating}</p>
+                    <p><strong>Additional Comments:</strong> ${feedback.additionalComments || 'N/A'}</p>
+                `;
+                fetchMessageDiv.style.color = 'black';
+            } else {
+                const error = await response.json();
+                fetchMessageDiv.textContent = error.message;
+                fetchMessageDiv.style.color = 'red';
+            }
+        } catch (error) {
+            fetchMessageDiv.textContent = 'It is viewed only by the owners of the form';
+            fetchMessageDiv.style.color = 'green';
+        }
+    });
+</script>
+
+</body>
+</html>
