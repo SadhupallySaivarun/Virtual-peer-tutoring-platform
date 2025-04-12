@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Info - Virtual Peer Platform</title>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+            authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+            projectId: "virtual-peer-tutoring-platform",
+            storageBucket: "virtual-peer-tutoring-platform.appspot.com",
+            messagingSenderId: "774540071256",
+            appId: "1:774540071256:web:00611441bc70bb0118152d",
+            measurementId: "G-K55QRT463Y"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Ensure script runs after page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("studentForm").addEventListener("submit", registerStudent);
+        });
+
+        async function registerStudent(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            console.log("Submit button clicked!"); // Debugging
+
+            // Get form data
+            const name = document.getElementById("name").value;
+            const student_id = document.getElementById("student_id").value;
+            const email = document.getElementById("email").value;
+            const course = document.getElementById("course").value;
+            const year = document.getElementById("year").value;
+            const bio = document.getElementById("bio").value;
+
+            try {
+                // Store data in Firestore
+                const docRef = await addDoc(collection(db, "students"), {
+                    name: name,
+                    student_id: student_id,
+                    email: email,
+                    course: course,
+                    year: year,
+                    bio: bio,
+                    timestamp: new Date()
+                });
+
+                console.log("Student info saved! Document ID:", docRef.id);
+
+                // Success message
+                document.getElementById("statusMessage").textContent = "Student info saved successfully!";
+                document.getElementById("statusMessage").style.color = "green";
+
+                // Clear form fields
+                document.getElementById("studentForm").reset();
+
+            } catch (error) {
+                console.error("Error storing student info:", error);
+
+                document.getElementById("statusMessage").textContent = "Error: " + error.message;
+                document.getElementById("statusMessage").style.color = "red";
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-form input,
+        .update-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .update-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .update-form button:hover {
+            background-color: #45a049;
+        }
+
+        #statusMessage {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Peer Platform - Student Information</h1>
+</header>
+
+<div class="container">
+    <div class="update-form">
+        <h2>Update Your Information</h2>
+        <form id="studentForm">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+
+            <label for="student_id">Student ID:</label>
+            <input type="number" id="student_id" name="student_id" placeholder="Enter your student ID" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="course">Course:</label>
+            <input type="text" id="course" name="course" placeholder="Enter your course">
+
+            <label for="year">Year of Study:</label>
+            <input type="number" id="year" name="year" placeholder="Enter your year of study">
+
+            <label for="bio">Short Bio:</label>
+            <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself"></textarea>
+
+            <button type="submit">Update Info</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+</div>
+
+</body>
+</html>
