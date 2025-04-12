@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+            authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+            projectId: "virtual-peer-tutoring-platform",
+            storageBucket: "virtual-peer-tutoring-platform.appspot.com",
+            messagingSenderId: "774540071256",
+            appId: "1:774540071256:web:00611441bc70bb0118152d",
+            measurementId: "G-K55QRT463Y"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Register User Function
+        window.registerUser = function(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            // Get user inputs
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Firebase Authentication - Create User
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("User created successfully:", user);
+                    alert("Registration successful! Redirecting to dashboard...");
+                    window.location.href = "dashboard.html"; // Redirect user
+                })
+                .catch((error) => {
+                    console.error("Error:", error.code, error.message);
+
+                    // Display relevant error messages
+                    if (error.code === "auth/email-already-in-use") {
+                        alert("This email is already registered. Please log in.");
+                    } else if (error.code === "auth/weak-password") {
+                        alert("Password should be at least 6 characters long.");
+                    } else if (error.code === "auth/invalid-email") {
+                        alert("Invalid email format. Please enter a valid email.");
+                    } else {
+                        alert("Error: " + error.message);
+                    }
+                });
+        };
+    </script>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            background-color: cadetblue;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            width: 250px;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: darkblue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: navy;
+        }
+    </style>
+</head>
+<body>
+    <header style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">Sign Up</header>
+
+    <main>
+        <form onsubmit="registerUser(event)">
+            <div>
+                <label>Name:</label><br>
+                <input type="text" id="fullname" placeholder="Full Name" required>
+            </div><br>
+
+            <div>
+                <label>Email:</label><br>
+                <input type="email" id="email" placeholder="Enter your Email" required>
+            </div><br>
+
+            <div>
+                <label>Password:</label><br>
+                <input type="password" id="password" placeholder="Enter Password" required>
+            </div><br>
+            <div class="user-type">
+                <label><input type="radio" name="userType" value="user" required> User</label>
+                <label><input type="radio" name="userType" value="organizer" required> Organizer</label>
+              </div>
+      
+      
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </main>
+</body>
+</html>
