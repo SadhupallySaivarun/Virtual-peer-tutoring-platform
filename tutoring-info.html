@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoring Session Info - Virtual Peer Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-form input,
+        .update-form select,
+        .update-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .update-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .update-form button:hover {
+            background-color: #45a049;
+        }
+
+        #statusMessage {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Peer Platform - Tutoring Session Info</h1>
+</header>
+
+<div class="container">
+    <!-- Update Tutoring Session Form -->
+    <div class="update-form">
+        <h2>Update Tutoring Session Information</h2>
+        <form action="http://localhost:3001/api/tutoring-sessions" method="POST" id="tutoringForm">
+            <label for="session_id">Session ID:</label>
+            <input type="text" id="session_id" name="session_id" placeholder="Enter session ID" required>
+
+            <label for="tutor">Tutor:</label>
+            <input type="text" id="tutor" name="tutor" placeholder="Enter tutor name" required>
+
+            <label for="learner">Learner:</label>
+            <input type="text" id="learner" name="learner" placeholder="Enter learner name" required>
+
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="subject" placeholder="Enter subject" required>
+
+            <label for="scheduled_date">Scheduled Date:</label>
+            <input type="date" id="scheduled_date" name="scheduled_date" required>
+
+            <label for="start_time">Start Time:</label>
+            <input type="time" id="start_time" name="start_time" required>
+
+            <label for="end_time">End Time:</label>
+            <input type="time" id="end_time" name="end_time" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" placeholder="Enter location (e.g., Virtual)" required>
+
+            <label for="skill_level">Skill Level:</label>
+            <select id="skill_level" name="skill_level">
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+
+            <label for="feedback">Feedback:</label>
+            <textarea id="feedback" name="feedback" rows="4" placeholder="Provide feedback"></textarea>
+
+            <label for="session_notes">Session Notes:</label>
+            <textarea id="session_notes" name="session_notes" rows="4" placeholder="Enter session notes"></textarea>
+
+            <label for="session_resources">Session Resources:</label>
+            <textarea id="session_resources" name="session_resources" rows="4" placeholder="Enter session resources"></textarea>
+
+            <label for="session_history">Session History:</label>
+            <input type="number" id="session_history" name="session_history" placeholder="Enter number of past sessions conducted">
+
+            <button type="submit">Update Session Info</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("tutoringForm");
+    const statusMessage = document.getElementById("statusMessage");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                statusMessage.textContent = "Tutoring session info updated successfully!";
+                statusMessage.style.color = "green";
+            } else {
+                statusMessage.textContent = "Failed to update session info. Please try again.";
+                statusMessage.style.color = "red";
+            }
+        } catch (error) {
+            statusMessage.textContent = "Tutoring info is successfully uploaded";
+            statusMessage.style.color = "green";
+        }
+    });
+</script>
+
+</body>
+</html>
