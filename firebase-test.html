@@ -1,0 +1,21 @@
+<script type="module">
+    // Import Firebase SDK via CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-analytics.js";
+  
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+      authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+      projectId: "virtual-peer-tutoring-platform",
+      storageBucket: "virtual-peer-tutoring-platform.firebasestorage.app",
+      messagingSenderId: "774540071256",
+      appId: "1:774540071256:web:00611441bc70bb0118152d",
+      measurementId: "G-K55QRT463Y",
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+  
