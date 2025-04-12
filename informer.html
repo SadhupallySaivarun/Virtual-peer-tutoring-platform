@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Informer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .floating-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .floating-btn:hover {
+            background: #218838;
+        }
+        .popup-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        .popup-form h2 {
+            text-align: center;
+            font-size: 18px;
+        }
+        label {
+            font-size: 14px;
+            display: block;
+            margin-top: 8px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            background: #28a745;
+            color: white;
+            border: none;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .close-btn {
+            background: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Button -->
+    <button class="floating-btn" onclick="openForm()">+ Volunteer Informer</button>
+
+    <!-- Pop-up Form -->
+    <div id="popupForm" class="popup-form">
+        <h2>Volunteer Registration</h2>
+        <form id="volunteerForm">
+            <label for="volunteerName">Your Name:</label>
+            <input type="text" id="volunteerName" name="volunteerName" required>
+
+            <label for="volunteerEmail">Your Email:</label>
+            <input type="email" id="volunteerEmail" name="volunteerEmail" required>
+
+            <label for="volunteerContact">Your Contact:</label>
+            <input type="text" id="volunteerContact" name="volunteerContact" required>
+
+            <label for="location">Area Visited:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="studentDetails">Students Facing Issues:</label>
+            <textarea id="studentDetails" name="studentDetails" rows="3" required></textarea>
+
+            <label for="principalContact">Principal's Contact:</label>
+            <input type="text" id="principalContact" name="principalContact">
+
+            <button type="submit">Submit</button>
+            <button type="button" class="close-btn" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+
+    <script>
+        function openForm() {
+            document.getElementById("popupForm").style.display = "block";
+        }
+
+        function closeForm() {
+            document.getElementById("popupForm").style.display = "none";
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+            authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+            projectId: "virtual-peer-tutoring-platform",
+            storageBucket: "virtual-peer-tutoring-platform.appspot.com",
+            messagingSenderId: "774540071256",
+            appId: "1:774540071256:web:00611441bc70bb0118152d",
+            measurementId: "G-K55QRT463Y"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Function to submit data to Firestore
+        async function submitForm(event) {
+            event.preventDefault();
+
+            const volunteerName = document.getElementById("volunteerName").value;
+            const volunteerEmail = document.getElementById("volunteerEmail").value;
+            const volunteerContact = document.getElementById("volunteerContact").value;
+            const location = document.getElementById("location").value;
+            const studentDetails = document.getElementById("studentDetails").value;
+            const principalContact = document.getElementById("principalContact").value;
+
+            try {
+                await addDoc(collection(db, "volunteer-informers"), {
+                    volunteerName,
+                    volunteerEmail,
+                    volunteerContact,
+                    location,
+                    studentDetails,
+                    principalContact,
+                    timestamp: new Date()
+                });
+
+                alert("Data submitted successfully!");
+                closeForm();
+                document.getElementById("volunteerForm").reset();
+            } catch (error) {
+                console.error("Error submitting data: ", error);
+                alert("Error submitting data. Please try again.");
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.getElementById("volunteerForm").addEventListener("submit", submitForm);
+        });
+    </script>
+
+</body>
+</html>
