@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            margin-top: 50px;
+            background-image: linear-gradient(to bottom right, #f3f8ff, #e4f0ff);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+        }
+        .schedule-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 15px 0;
+        }
+        .schedule-item:last-child {
+            border-bottom: none;
+        }
+        .schedule-item div {
+            flex: 1;
+            padding: 5px;
+        }
+        .schedule-item div h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #34495e;
+        }
+        .schedule-item div p {
+            margin: 5px 0;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        .schedule-item div .details {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Tutor Schedule</h1>
+        </div>
+
+        <!-- Schedule Entries -->
+        <div class="schedule-item">
+            <div>
+                <h3>Slot ID: 101</h3>
+                <p><strong>Tutor:</strong> John Doe</p>
+                <p><strong>Start Time:</strong> 10:00 AM</p>
+                <p><strong>End Time:</strong> 11:00 AM</p>
+                <p><strong>Day of Week:</strong> Monday</p>
+            </div>
+            <div>
+                <p><strong>Recurring:</strong> Yes</p>
+                <p><strong>Max Students:</strong> 10</p>
+                <p><strong>Location:</strong> Room 101, Main Building</p>
+                <p class="details"><strong>Notes:</strong> Bring your homework and questions.</p>
+            </div>
+        </div>
+
+        <div class="schedule-item">
+            <div>
+                <h3>Slot ID: 102</h3>
+                <p><strong>Tutor:</strong> Jane Smith</p>
+                <p><strong>Start Time:</strong> 2:00 PM</p>
+                <p><strong>End Time:</strong> 3:00 PM</p>
+                <p><strong>Day of Week:</strong> Wednesday</p>
+            </div>
+            <div>
+                <p><strong>Recurring:</strong> No</p>
+                <p><strong>Max Students:</strong> 5</p>
+                <p><strong>Location:</strong> Room 202, Science Wing</p>
+                <p class="details"><strong>Notes:</strong> Bring your laptop for coding practice.</p>
+            </div>
+        </div>
+
+        <!-- Additional schedule entries can go here -->
+
+        <div class="footer">
+            <p>&copy; 2025 Tutor Platform</p>
+        </div>
+    </div>
+
+</body>
+</html>
