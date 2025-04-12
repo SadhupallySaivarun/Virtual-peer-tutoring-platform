@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Level Info - Virtual Peer Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .skilllevel-info, .update-form {
+            margin-bottom: 20px;
+        }
+
+        .update-form input[type="text"],
+        .update-form input[type="number"],
+        .update-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .update-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s;
+        }
+
+        .update-form button:hover {
+            background-color: #45a049;
+        }
+
+        .skilllevel-info h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .data-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            .update-form input[type="text"],
+            .update-form input[type="number"],
+            .update-form textarea {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Peer Platform - Skill Level Information</h1>
+</header>
+
+<div class="container">
+    <!-- Update Skill Level Form -->
+    <div class="update-form">
+        <h2>Enter Skill Level Information</h2>
+        <form id="skillLevelForm">
+            <label for="proficiency_level">Proficiency Level:</label>
+            <input type="text" id="proficiency_level" name="proficiency_level" placeholder="Enter proficiency level (e.g., Beginner, Intermediate, Advanced)" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" placeholder="Describe the skill level in detail" required></textarea>
+
+            <label for="associated_subjects">Associated Subjects:</label>
+            <input type="text" id="associated_subjects" name="associated_subjects" placeholder="Enter associated subjects (e.g., Algebra, Geometry, Calculus)" required>
+
+            <label for="minimum_score">Minimum Score:</label>
+            <input type="number" id="minimum_score" name="minimum_score" placeholder="Enter the minimum score required" required>
+
+            <label for="maximum_score">Maximum Score:</label>
+            <input type="number" id="maximum_score" name="maximum_score" placeholder="Enter the maximum score" required>
+
+            <label for="resource_library">Resource Library:</label>
+            <textarea id="resource_library" name="resource_library" rows="4" placeholder="List the resources in the library" required></textarea>
+
+            <label for="students">Students:</label>
+            <input type="text" id="students" name="students" placeholder="Enter the names of enrolled students (comma-separated)" required>
+
+            <label for="tutor_profiles">Tutor Profiles:</label>
+            <textarea id="tutor_profiles" name="tutor_profiles" rows="4" placeholder="Provide tutor profiles or qualifications" required></textarea>
+
+            <label for="session_history">Session History:</label>
+            <textarea id="session_history" name="session_history" rows="4" placeholder="Enter session history information (e.g., number of sessions conducted)" required></textarea>
+
+            <label for="matching_algorithms">Matching Algorithms:</label>
+            <input type="text" id="matching_algorithms" name="matching_algorithms" placeholder="Enter the version of matching algorithm or details" required>
+
+            <label for="tutoring_sessions">Tutoring Sessions:</label>
+            <textarea id="tutoring_sessions" name="tutoring_sessions" rows="4" placeholder="List tutoring sessions linked to this skill level" required></textarea>
+
+            <button type="submit">Submit Skill Level Info</button>
+        </form>
+    </div>
+
+    <!-- Display Existing Skill Level Data -->
+    <div class="skilllevel-info">
+        <h2>Existing Skill Level Data</h2>
+
+        <table class="data-table" id="skillLevelTable">
+            <thead>
+                <tr>
+                    <th>Proficiency Level</th>
+                    <th>Description</th>
+                    <th>Associated Subjects</th>
+                    <th>Minimum Score</th>
+                    <th>Maximum Score</th>
+                    <th>Resource Library</th>
+                    <th>Students</th>
+                    <th>Tutor Profiles</th>
+                    <th>Session History</th>
+                    <th>Matching Algorithms</th>
+                    <th>Tutoring Sessions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamic data will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('skillLevelForm');
+    const tableBody = document.querySelector('#skillLevelTable tbody');
+
+    const addRowToTable = (data) => {
+        const row = `
+            <tr>
+                <td>${data.proficiency_level}</td>
+                <td>${data.description}</td>
+                <td>${data.associated_subjects}</td>
+                <td>${data.minimum_score}</td>
+                <td>${data.maximum_score}</td>
+                <td>${data.resource_library}</td>
+                <td>${data.students}</td>
+                <td>${data.tutor_profiles}</td>
+                <td>${data.session_history}</td>
+                <td>${data.matching_algorithms}</td>
+                <td>${data.tutoring_sessions}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    };
+
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = Object.fromEntries(new FormData(form));
+        addRowToTable(formData); // Dynamically add the submitted data to the table
+        form.reset();
+    });
+</script>
+</body>
+</html>
