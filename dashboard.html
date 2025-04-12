@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Virtual Peer Platform</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Virtual Peer Platform</div>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html" id="authLink">Login</a></li>
+        <li><a href="signup.html" id="signupLink">Sign Up</a></li>
+      </ul>
+
+      <!-- 🔔 Notification Bell -->
+      <div class="notification-container">
+        <button id="notificationBell">🔔 <span id="notificationBadge" class="hidden">🔴</span></button>
+        <ul id="notificationDropdown" class="hidden"></ul>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="dashboard">
+      <h2>Welcome, <span id="userEmail">User</span>!</h2>
+      <div class="dashboard-buttons">
+        <div class="button-box"><button onclick="navigateTo('student-info.html')">Student Info</button></div>
+        <div class="button-box"><button onclick="navigateTo('subject-info.html')">Subject Info</button></div>
+        <div class="button-box"><button onclick="navigateTo('tutoring-info.html')">Tutoring</button></div>
+        <div class="button-box"><button onclick="navigateTo('feedback-info.html')">Feedback</button></div>
+        <div class="button-box"><button onclick="navigateTo('skills-info.html')">Skill Levels</button></div>
+        <div class="button-box"><button onclick="navigateTo('schedules-info.html')">Schedules</button></div>
+        <div class="button-box"><button onclick="navigateTo('tutor-profile.html')">Tutor Profile</button></div>
+        <div class="button-box"><button onclick="navigateTo('availability-info.html')">Availability Slots</button></div>
+        <div class="button-box"><button onclick="navigateTo('matching-algorithm.html')">Matching Algorithms</button></div>
+        <div class="button-box"><button onclick="navigateTo('session-history.html')">Session History</button></div>
+        <div class="button-box"><button onclick="navigateTo('notifications.html')">Notification Settings</button></div>
+        <div class="button-box"><button onclick="navigateTo('resources-library.html')">Resource Library</button></div>
+        <div class="button-box"><button onclick="navigateTo('chat.html')">Chat</button></div>
+        <div class="button-box"><button onclick="navigateTo('video-conference.html')">Video Conference</button></div>
+        <button class="floating-btn" onclick="openForm()">+ Volunteer Informer</but
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Virtual Peer Platform</p>
+  </footer>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+      authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+      projectId: "virtual-peer-tutoring-platform",
+      storageBucket: "virtual-peer-tutoring-platform.appspot.com",
+      messagingSenderId: "774540071256",
+      appId: "1:774540071256:web:00611441bc70bb0118152d",
+      measurementId: "G-K55QRT463Y"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Handle User Authentication
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("userEmail").innerText = user.email;
+        document.getElementById("authLink").innerText = "Logout";
+        document.getElementById("authLink").href = "#";
+        document.getElementById("authLink").addEventListener("click", logoutUser);
+        document.getElementById("signupLink").style.display = "none";
+        loadNotifications(user.uid);
+      }
+    });
+
+    function logoutUser() {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+
+    // Load Notifications
+    function loadNotifications(userId) {
+      db.collection("notifications")
+        .where("studentId", "in", ["all_students", userId])
+        .orderBy("timestamp", "desc")
+        .onSnapshot(snapshot => {
+          const dropdown = document.getElementById("notificationDropdown");
+          dropdown.innerHTML = "";
+          if (snapshot.empty) {
+            dropdown.innerHTML = "<li>No new notifications.</li>";
+            document.getElementById("notificationBadge").classList.add("hidden");
+            return;
+          }
+
+          document.getElementById("notificationBadge").classList.remove("hidden");
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            const li = document.createElement("li");
+            li.innerHTML = `
+              ${data.type}: ${data.message} 
+              ${data.roomID ? `<button onclick="joinClass('${data.roomID}')">Join</button>` : ""}
+            `;
+            dropdown.appendChild(li);
+          });
+        });
+    }
+
+    function joinClass(roomID) {
+      if (!roomID) {
+        alert("Invalid class link.");
+        return;
+      }
+      window.location.href = `video-conference.html?roomID=${roomID}`;
+    }
+
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>
