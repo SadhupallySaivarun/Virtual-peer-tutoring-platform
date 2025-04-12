@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subject Info - Virtual Peer Platform</title>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMtfgDcuImaRDFwS09rkhikkViz4wp2fs",
+            authDomain: "virtual-peer-tutoring-platform.firebaseapp.com",
+            projectId: "virtual-peer-tutoring-platform",
+            storageBucket: "virtual-peer-tutoring-platform.appspot.com",
+            messagingSenderId: "774540071256",
+            appId: "1:774540071256:web:00611441bc70bb0118152d",
+            measurementId: "G-K55QRT463Y"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Check if user is logged in
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("userStatus").textContent = `Logged in as: ${user.email}`;
+                document.getElementById("loginButton").style.display = "none";
+            } else {
+                document.getElementById("userStatus").textContent = "Not logged in";
+                document.getElementById("loginButton").style.display = "block";
+            }
+        });
+
+        // Google Login
+        document.getElementById("loginButton").addEventListener("click", async () => {
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error("Login Error:", error);
+            }
+        });
+
+        // Ensure script runs after page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("subjectForm").addEventListener("submit", registerSubject);
+        });
+
+        async function registerSubject(event) {
+            event.preventDefault(); // Prevent page refresh
+
+            const user = auth.currentUser;
+            if (!user) {
+                alert("You must be logged in to submit data.");
+                return;
+            }
+
+            console.log("Submit button clicked!"); // Debugging
+
+            // Get form data
+            const subjectData = {
+                subject_name: document.getElementById("subject_name").value,
+                subject_description: document.getElementById("subject_description").value,
+                skill_level: document.getElementById("skill_level").value,
+                tutor_name: document.getElementById("tutor_name").value,
+                tutor_bio: document.getElementById("tutor_bio").value,
+                resources_available: parseInt(document.getElementById("resources_available").value),
+                resources: document.getElementById("resources").value,
+                sessions_conducted: parseInt(document.getElementById("sessions_conducted").value),
+                last_session: document.getElementById("last_session").value,
+                average_duration: parseFloat(document.getElementById("average_duration").value),
+                total_sessions: parseInt(document.getElementById("total_sessions").value),
+                students: document.getElementById("students").value,
+                algorithm_version: document.getElementById("algorithm_version").value,
+                last_update: document.getElementById("last_update").value,
+                timestamp: new Date(),
+                userId: user.uid, // Store user ID
+                userEmail: user.email // Store user email
+            };
+
+            try {
+                // Store data in Firestore
+                const docRef = await addDoc(collection(db, "subjects"), subjectData);
+                console.log("Subject info saved! Document ID:", docRef.id);
+
+                // Success message
+                document.getElementById("statusMessage").textContent = "Subject info saved successfully!";
+                document.getElementById("statusMessage").style.color = "green";
+
+                // Clear form fields
+                document.getElementById("subjectForm").reset();
+
+            } catch (error) {
+                console.error("Error storing subject info:", error);
+
+                document.getElementById("statusMessage").textContent = "Error: " + error.message;
+                document.getElementById("statusMessage").style.color = "red";
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-form input,
+        .update-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .update-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .update-form button:hover {
+            background-color: #45a049;
+        }
+
+        #statusMessage {
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Virtual Peer Platform - Subject Information</h1>
+    <button id="loginButton">Login with Google</button>
+    <p id="userStatus">Checking login status...</p>
+</header>
+
+<div class="container">
+    <div class="update-form">
+        <h2>Update Subject Information</h2>
+        <form id="subjectForm">
+            <label for="subject_name">Subject Name:</label>
+            <input type="text" id="subject_name" required>
+
+            <label for="subject_description">Subject Description:</label>
+            <textarea id="subject_description"></textarea>
+
+            <label for="skill_level">Skill Level:</label>
+            <input type="text" id="skill_level">
+
+            <label for="tutor_name">Tutor Name:</label>
+            <input type="text" id="tutor_name">
+
+            <label for="tutor_bio">Tutor Bio:</label>
+            <textarea id="tutor_bio"></textarea>
+
+            <label for="resources_available">Total Resources Available:</label>
+            <input type="number" id="resources_available" min="0">
+
+            <label for="resources">Resources:</label>
+            <textarea id="resources"></textarea>
+
+            <label for="sessions_conducted">Sessions Conducted:</label>
+            <input type="number" id="sessions_conducted" min="0">
+
+            <label for="last_session">Last Session Date:</label>
+            <input type="date" id="last_session">
+
+            <label for="average_duration">Average Session Duration (hours):</label>
+            <input type="number" id="average_duration" step="0.1">
+
+            <label for="total_sessions">Total Sessions:</label>
+            <input type="number" id="total_sessions" min="0">
+
+            <label for="students">Enrolled Students:</label>
+            <textarea id="students"></textarea>
+
+            <label for="algorithm_version">Algorithm Version:</label>
+            <input type="text" id="algorithm_version">
+
+            <label for="last_update">Last Algorithm Update:</label>
+            <input type="date" id="last_update">
+
+            <button type="submit">Update Info</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+</div>
+
+</body>
+</html>
